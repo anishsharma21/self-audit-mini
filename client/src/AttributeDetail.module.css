@@ -1,0 +1,10 @@
+.attributeDetailContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.detailElement {
+    margin-bottom: 10px;
+}

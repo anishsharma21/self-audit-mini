@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import styles from './AttributeDetail.module.css';
+import RangeInput from './RangeInput';
+import TextInput from './TextInput';
+import RadioInput from './RadioInput';
+import CheckboxInput from './CheckboxInput.js';
 
 const attributeQuestions = {
     1: [
@@ -37,29 +42,26 @@ const AttributeDetail = () => {
     };
 
     return (
-        <div>
+        <div className={styles.attributeDetailContainer}>
             <h1>Attribute Detail for ID: {id}</h1>
             {questions.map((question, index) => {
                 const value = values[index];
 
                 return (
-                    <div key={index}>
+                    <div key={index} className={styles.detailElement}>
                         <label>
                             {question.question}
                             {question.inputType === 'range' && (
-                                <input type="range" min={question.min} max={question.max} step={question.step} value={value} onChange={(e) => handleValueChange(index, e.target.value)} />
+                                <RangeInput min={question.min} max={question.max} step={question.step} value={value} onChange={(e) => handleValueChange(index, e.target.value)} />
                             )}
                             {question.inputType === 'text' && (
-                                <input type="text" value={value} onChange={(e) => handleValueChange(index, e.target.value)} />
+                                <TextInput value={value} onChange={(e) => handleValueChange(index, e.target.value)} />
                             )}
-                            {question.inputType === 'radio' && question.options.map((option, optionIndex) => (
-                                <div key={optionIndex}>
-                                    <input type="radio" name={`question-${index}`} value={option} checked={value === option} onChange={(e) => handleValueChange(index, e.target.value)} />
-                                    <label>{option}</label>
-                                </div>
-                            ))}
+                            {question.inputType === 'radio' && (
+                                <RadioInput name={`question-${index}`} options={question.options} value={value} onChange={(e) => handleValueChange(index, e.target.value)} />
+                            )}
                             {question.inputType === 'checkbox' && (
-                                <input type="checkbox" checked={value} onChange={(e) => handleValueChange(index, e.target.checked)} />
+                                <CheckboxInput checked={value} onChange={(e) => handleValueChange(index, e.target.checked)} />
                             )}
                             <span>{value} {question.unit}</span>
                         </label>
