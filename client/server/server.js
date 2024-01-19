@@ -3,8 +3,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const saltRounds = 10;
 const { readJsonFile } = require('./db');
-
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -35,6 +36,28 @@ app.use(bodyParser.json());
 
 app.get('/profile', authenticateJWT, (req, res) => {
     res.json({ message: 'You are authenticated', user: req.user });
+});
+
+app.post('/register', (req, res) => {
+    const { username, password, email } = req.body;
+  
+    if (users.find(u => u.username === username)) {
+      return res.status(400).json({ message: 'Username is already taken' });
+    }
+  
+    if (users.find(u => u.email === email)) {
+      return res.status(400).json({ message: 'Email is already in use' });
+    }
+  
+    const hashedPassword = bcrypt.hashSync(password, saltRounds);
+    const newUser = { id: Date.now(), username, password: hashedPassword, email };
+  
+    users.push(newUser);
+  
+    // Write the updated users array back to users.json
+    fs.writeFileSync('./models/users.json', JSON.stringify(users, null, 2));
+  
+    res.status(201).json({ message: 'User registered successfully' });
 });
 
 app.post('/login', (req, res) => {

@@ -1,14 +1,8 @@
 [
-    {
-        "id": 1,
-        "username": "user1",
-        "email": "user1@example.com",
-        "password": "password1"
-    },
-    {
-        "id": 2,
-        "username": "user2",
-        "email": "user2@example.com",
-        "password": "password2"
-    }
+  {
+    "id": 1705625083381,
+    "username": "anish",
+    "password": "$2b$10$c5CIShUHA8U1e54z185WvuP/t2GHql4oncJVbxrcV0Q8bcyXtc.B6",
+    "email": "anisharma2103@gmail.com"
+  }
 ]
