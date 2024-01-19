@@ -10,7 +10,7 @@ const Register = () => {
         e.preventDefault();
       
         try {
-          const response = await axios.post('http://localhost:5000/register', { username, password, email });
+          const response = await axios.post('http://localhost:5001/register', { username, password, email });
       
           if (response.data) {
             console.log(response.data.message);

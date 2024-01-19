@@ -39,6 +39,8 @@ app.get('/profile', authenticateJWT, (req, res) => {
 });
 
 app.post('/register', (req, res) => {
+    console.log('Register request received with body:', req.body);
+    users = readJsonFile('./models/users.json');
     const { username, password, email } = req.body;
   
     if (users.find(u => u.username === username)) {
@@ -56,20 +58,31 @@ app.post('/register', (req, res) => {
   
     // Write the updated users array back to users.json
     fs.writeFileSync('./models/users.json', JSON.stringify(users, null, 2));
+    const fileContents = fs.readFileSync('./models/users.json', 'utf8');
+    console.log('Contents of users.json file:', fileContents);
   
     res.status(201).json({ message: 'User registered successfully' });
+    console.log('New user registered:', newUser);
 });
 
 app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    const user = users.find(u => u.username === username);
-  
-    if (user && bcrypt.compareSync(password, user.password)) {
-      const token = jwt.sign({ sub: user.id }, process.env.SECRET_KEY, { expiresIn: '1h' });
-      res.status(200).json({ token });
-    } else {
-      res.status(400).json({ message: 'Username or password is incorrect' });
-    }
+  console.log('Login request received with body:', req.body);
+  users = readJsonFile('./models/users.json');
+  const { username, password } = req.body;
+  const user = users.find(u => u.username === username);
+
+  if (user && bcrypt.compareSync(password, user.password)) {
+    const token = jwt.sign({ sub: user.id }, process.env.SECRET_KEY, { expiresIn: '1h' });
+    res.status(200).json({ token });
+  } else {
+    res.status(400).json({ message: 'Username or password is incorrect' });
+  }
+
+  if (user) {
+    console.log('User found:', user);
+  } else {
+    console.log('No user found with username:', username);
+  }
 });
 
 app.listen(port, () => {
