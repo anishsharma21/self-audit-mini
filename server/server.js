@@ -73,6 +73,7 @@ app.post('/login', (req, res) => {
 
   if (user && bcrypt.compareSync(password, user.password)) {
     const token = jwt.sign({ sub: user.id }, process.env.SECRET_KEY, { expiresIn: '1h' });
+    res.cookie('token', token, { httpOnly: true }); // Set the token as a HTTP-only cookie
     res.status(200).json({ token });
   } else {
     res.status(400).json({ message: 'Username or password is incorrect' });

@@ -1,11 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ setIsLoggedIn }) => { // Add setIsLoggedIn prop
+    const isLoggedIn = !!localStorage.getItem('token');
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        setIsLoggedIn(false); // Update isLoggedIn state after logout
+    };
+
     return (
         <nav>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+            {isLoggedIn ? (
+                <>
+                    <Link to="/protected">Protected</Link>
+                    <button onClick={handleLogout}>Logout</button>
+                </>
+            ) : (
+                <>
+                    <Link to="/login">Login</Link>
+                    <Link to="/register">Register</Link>
+                </>
+            )}
         </nav>
     );
 };

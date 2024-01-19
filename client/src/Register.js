@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import api from './api'; // Import the axios instance from api.js instead of axios
 
 const Register = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const navigate = useNavigate(); // Add this line
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-      
-        try {
-          const response = await axios.post('http://localhost:5001/register', { username, password, email });
-      
-          if (response.data) {
-            console.log(response.data.message);
-            // Here you can handle what happens after successful registration
-            // For example, redirect the user to the login page
-          }
-        } catch (error) {
-          console.error(error);
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await api.post('/register', { username, password, email });
+
+      if (response.data) {
+        console.log(response.data.message);
+        navigate('/login'); // Redirect the user to the login page
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
     return (
         <form onSubmit={handleSubmit}>
