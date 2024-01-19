@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Navbar from './Navbar';
-import ProtectedComponent from './ProtectedComponent';
+import MainView from './MainView';
+import AttributeDetail from './AttributeDetail'; // Import AttributeDetail
 import { Navigate } from 'react-router-dom';
 
 function App() {
@@ -16,13 +17,16 @@ function App() {
 
   return (
     <Router>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /> {/* Pass setIsLoggedIn to Navbar */}
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Routes>
         {isLoggedIn ? (
-          <Route path="/protected" element={<ProtectedComponent />} />
+          <>
+            <Route path="/protected" element={<MainView />} />
+            <Route path="/attribute/:id" element={<AttributeDetail />} /> {/* New route for AttributeDetail */}
+          </>
         ) : (
           <>
-            <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} /> {/* Pass setIsLoggedIn to Login */}
+            <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </>
