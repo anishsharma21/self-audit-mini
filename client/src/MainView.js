@@ -1,5 +1,6 @@
 import React from 'react';
-import AttributeCard from './AttributeCard'; // Import AttributeCard
+import { Outlet } from 'react-router-dom'; // Import Outlet
+import AttributeList from './AttributeList'; // Import AttributeList
 
 const MainView = () => {
     // Dummy data
@@ -13,9 +14,8 @@ const MainView = () => {
     return (
         <div>
             <h1>Main View</h1>
-            {attributes.map(attribute => (
-                <AttributeCard key={attribute.id} attribute={attribute} />
-            ))}
+            <AttributeList attributes={attributes} /> {/* Pass the entire attribute object */}
+            <Outlet /> {/* Render nested routes */}
         </div>
     );
 }

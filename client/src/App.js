@@ -20,10 +20,9 @@ function App() {
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Routes>
         {isLoggedIn ? (
-          <>
-            <Route path="/protected" element={<MainView />} />
-            <Route path="/attribute/:id" element={<AttributeDetail />} /> {/* New route for AttributeDetail */}
-          </>
+          <Route path="/protected" element={<MainView />}>
+            <Route path=":id" element={<AttributeDetail />} /> {/* Nested route for AttributeDetail */}
+          </Route>
         ) : (
           <>
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />

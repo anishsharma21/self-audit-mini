@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const attributeQuestions = {
-    sleep: [
+    1: [
         { inputType: 'range', question: 'How many hours of sleep did you get?', min: 5, max: 8.5, step: 0.5, unit: 'hours' },
         { inputType: 'range', question: 'How long did it take for you to get up?', min: 0, max: 60, step: 5, unit: 'minutes' },
         { inputType: 'range', question: 'How long did your morning routine take?', min: 30, max: 120, step: 15, unit: 'minutes' },
         { inputType: 'radio', question: 'What time were you in bed?', options: ['Before 9:45PM', '9:45PM - 10:45PM', '10:45PM - 11:45PM', 'After 12:00AM'] },
         // Add more sleep questions here
     ],
-    diet: [
+    2: [
         { inputType: 'range', question: 'Did you hit your calorie goal?', min: 0, max: 1000, step: 100, unit: 'calories' },
         { inputType: 'radio', question: 'Avoided excessive or unnecessary snacking?', options: ['Not at all', 'A little', 'Somewhat', 'Mostly', 'Completely'] },
         { inputType: 'radio', question: 'Avoided junk food?', options: ['Not at all', 'Somewhat', 'Completely'] },
