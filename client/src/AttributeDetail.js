@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './AttributeDetail.module.css';
 import RangeInput from './RangeInput';
@@ -6,6 +6,7 @@ import TextInput from './TextInput';
 import RadioInput from './RadioInput';
 import CheckboxInput from './CheckboxInput.js';
 import axios from 'axios';
+import { useMemo } from 'react';
 
 const attributeQuestions = {
     1: {
@@ -32,9 +33,14 @@ const attributeQuestions = {
 
 const AttributeDetail = () => {
     const { id } = useParams();
-    const questions = attributeQuestions[id]?.questions || [];
+    const questions = useMemo(() => attributeQuestions[id]?.questions || [], [id]);
 
     const [values, setValues] = useState(questions.map(question => question.min || ''));
+
+    // Add this useEffect hook
+    useEffect(() => {
+        setValues(questions.map(question => question.min || ''));
+    }, [id, questions]);
 
     const handleValueChange = (index, value) => {
         const newValues = [...values];
