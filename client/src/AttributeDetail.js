@@ -12,8 +12,8 @@ const attributeQuestions = {
     1: {
         databaseId: "c2c2f05d-c1f2-4a85-92d9-7edbce270298",
         questions: [
-            { inputType: 'range', question: 'How many hours of sleep did you get?', min: 5, max: 8.5, step: 0.5, unit: 'hours', propertyName: 'Hours-of-sleep' },
-            { inputType: 'range', question: 'How long did it take for you to get up?', min: 0, max: 60, step: 5, unit: 'minutes', propertyName: 'Morning-routine-time' },
+            { inputType: 'range', question: 'How many hours of sleep did you get?', min: 4, max: 8.5, step: 0.25, unit: 'hours', propertyName: 'Hours-of-sleep' },
+            { inputType: 'range', question: 'How long did it take for you to get up?', min: 0, max: 60, step: 1, unit: 'minutes', propertyName: 'Morning-routine-time' },
             { inputType: 'range', question: 'How long did your morning routine take?', min: 30, max: 120, step: 15, unit: 'minutes', propertyName: 'Time-taken-to-get-up' },
             { inputType: 'radio', question: 'What time were you in bed?', options: ['Before 9:45PM', '9:45PM - 10:45PM', '10:45PM - 11:45PM', 'After 12:00AM'], propertyName: 'Bedtime' },
             // Add more sleep questions here
@@ -125,6 +125,12 @@ const AttributeDetail = () => {
         }
     };
 
+    const convertToHoursAndMinutes = (decimalHours) => {
+        const hours = Math.floor(decimalHours);
+        const minutes = Math.round((decimalHours - hours) * 60);
+        return `${hours}hrs ${minutes}min`;
+    };
+
     return (
         <div className={styles.attributeDetailContainer}>
             <h1>Attribute Detail for ID: {id}</h1>
@@ -147,7 +153,9 @@ const AttributeDetail = () => {
                             {question.inputType === 'checkbox' && (
                                 <CheckboxInput checked={value} onChange={(e) => handleValueChange(index, e.target.checked)} />
                             )}
-                            <span>{value} {question.unit}</span>
+                            <span>
+                                {question.propertyName === 'Hours-of-sleep' ? convertToHoursAndMinutes(value) : `${value} ${question.unit}`}
+                            </span>
                         </label>
                     </div>
                 );

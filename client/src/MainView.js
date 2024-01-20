@@ -8,7 +8,11 @@ const MainView = () => {
         { id: 1, name: 'Sleep' },
         { id: 2, name: 'Diet' },
         { id: 3, name: 'Physical Activity' },
-        // Add more attributes as needed
+        { id: 4, name: 'Mental' },
+        { id: 5, name: 'Social' },
+        { id: 6, name: 'Reading' },
+        { id: 7, name: 'Facial Swelling' },
+        { id: 8, name: 'Deep Work Hours' },
     ];
 
     return (

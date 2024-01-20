@@ -13,7 +13,7 @@ const Navbar = ({ setIsLoggedIn }) => { // Add setIsLoggedIn prop
         <nav>
             {isLoggedIn ? (
                 <>
-                    <Link to="/protected">Protected</Link>
+                    <Link to="/protected">Self Audit Mini</Link>
                     <button onClick={handleLogout}>Logout</button>
                 </>
             ) : (
