@@ -14,14 +14,7 @@ const attributeQuestions = {
         { inputType: 'range', question: 'How long did your morning routine take?', min: 30, max: 120, step: 15, unit: 'minutes' },
         { inputType: 'radio', question: 'What time were you in bed?', options: ['Before 9:45PM', '9:45PM - 10:45PM', '10:45PM - 11:45PM', 'After 12:00AM'] },
         // Add more sleep questions here
-    ],
-    2: [
-        { inputType: 'range', question: 'Did you hit your calorie goal?', min: 0, max: 1000, step: 100, unit: 'calories' },
-        { inputType: 'radio', question: 'Avoided excessive or unnecessary snacking?', options: ['Not at all', 'A little', 'Somewhat', 'Mostly', 'Completely'] },
-        { inputType: 'radio', question: 'Avoided junk food?', options: ['Not at all', 'Somewhat', 'Completely'] },
-        { inputType: 'checkbox', question: 'Did you take your Vitamin D supplement?' },
-        // Add more diet questions here
-    ],
+    ]
     // Add more attributes here
 };
 
@@ -77,9 +70,13 @@ const AttributeDetail = () => {
                         "number": values[2] // The third question's response
                     },
                     "Bedtime": {
-                        "select": {
-                            "name": values[3] // The fourth question's response
-                        }
+                        "rich_text": [
+                            {
+                                "text": {
+                                    "content": values[3] // The fourth question's response
+                                }
+                            }
+                        ]
                     }
                     // Add more properties here for additional questions
                 }

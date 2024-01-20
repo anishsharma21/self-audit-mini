@@ -64,7 +64,6 @@ app.get('/notion/:pageId', async (req, res) => {
 });
 
 app.post('/notion', async (req, res) => {
-
   try {
     const response = await axios.post(`https://api.notion.com/v1/pages`, {
       parent: { database_id: process.env.NOTION_DATABASE_ID },
@@ -84,19 +83,41 @@ app.post('/notion', async (req, res) => {
           }
         },
         "Hours-of-sleep": {
-          "number": req.body.properties["Hours-of-sleep"].number
+          "rich_text": [
+            {
+              "text": {
+                "content": `${req.body.properties["Hours-of-sleep"].number} hours of sleep`
+              }
+            }
+          ]
         },
         "Morning-routine-time": {
-          "number": req.body.properties["Morning-routine-time"].number
+          "rich_text": [
+            {
+              "text": {
+                "content": `Morning routine: ${req.body.properties["Morning-routine-time"].number} minutes`
+              }
+            }
+          ]
         },
         "Time-taken-to-get-up": {
-          "number": req.body.properties["Time-taken-to-get-up"].number
+          "rich_text": [
+            {
+              "text": {
+                "content": `Out of bed after ${req.body.properties["Time-taken-to-get-up"].number} minutes`
+              }
+            }
+          ]
         },
         "Bedtime": {
-          "select": {
-            "name": req.body.properties["Bedtime"].select.name
-          }
-        }
+          "rich_text": [
+            {
+              "text": {
+                "content": req.body.properties["Bedtime"].select.name
+              }
+            }
+          ]
+        },
       }
     }, { headers: notionHeaders });
     res.json(response.data);
@@ -125,19 +146,41 @@ app.patch('/notion/:pageId', async (req, res) => {
           }
         },
         "Hours-of-sleep": {
-          "number": req.body.properties["Hours-of-sleep"].number
+          "rich_text": [
+            {
+              "text": {
+                "content": `${req.body.properties["Hours-of-sleep"].number} hours of sleep`
+              }
+            }
+          ]
         },
         "Morning-routine-time": {
-          "number": req.body.properties["Morning-routine-time"].number
+          "rich_text": [
+            {
+              "text": {
+                "content": `Morning routine: ${req.body.properties["Morning-routine-time"].number} minutes`
+              }
+            }
+          ]
         },
         "Time-taken-to-get-up": {
-          "number": req.body.properties["Time-taken-to-get-up"].number
+          "rich_text": [
+            {
+              "text": {
+                "content": `Out of bed after ${req.body.properties["Time-taken-to-get-up"].number} minutes`
+              }
+            }
+          ]
         },
         "Bedtime": {
-          "select": {
-            "name": req.body.properties["Bedtime"].select.name
-          }
-        }
+          "rich_text": [
+            {
+              "text": {
+                "content": req.body.properties["Bedtime"].select.name
+              }
+            }
+          ]
+        },
       }
     }, { headers: notionHeaders });
     res.json(response.data);
