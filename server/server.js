@@ -53,6 +53,33 @@ app.get('/notion', async (req, res) => {
   }
 });
 
+app.post('/notion/:databaseId/query', async (req, res) => {
+  const notionHeaders = {
+    "Authorization": `Bearer ${process.env.NOTION_API_KEY}`,
+    "Content-Type": "application/json",
+    "Notion-Version": "2021-08-16"
+  };
+
+  const currentDate = new Date().toISOString().split('T')[0]; // Get today's date in the format YYYY-MM-DD
+
+  try {
+    const response = await axios.post(`https://api.notion.com/v1/databases/${req.params.databaseId}/query`, {
+      filter: {
+        "property": "Date",
+        "date": {
+          "equals": currentDate
+        }
+      },
+      sorts: req.body.sorts
+    }, { headers: notionHeaders });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error(error.response.data); // Log the error data
+    res.json({ error: error.message });
+  }
+});
+
 app.get('/notion/:pageId', async (req, res) => {
   try {
     const response = await axios.get(`https://api.notion.com/v1/pages/${req.params.pageId}`, { headers: notionHeaders });
@@ -85,60 +112,53 @@ app.post('/notion', async (req, res) => {
 
 app.patch('/notion/:pageId', async (req, res) => {
   try {
-    const response = await axios.patch(`https://api.notion.com/v1/pages/${req.params.pageId}`, {
-      properties: {
-        "Name": {
+    const properties = req.body.properties;
+    let updatedProperties = {};
+
+    for (let key in properties) {
+      if (properties[key].hasOwnProperty('number')) {
+        updatedProperties[key] = {
+          "rich_text": [
+            {
+              "text": {
+                "content": `${properties[key].number}`
+              }
+            }
+          ]
+        };
+      } else if (properties[key].hasOwnProperty('title')) {
+        updatedProperties[key] = {
           "title": [
             {
               "text": {
-                "content": req.body.properties.Name.title[0].text.content
+                "content": properties[key].title[0].text.content
               }
             }
           ]
-        },
-        "Date": {
+        };
+      } else if (properties[key].hasOwnProperty('date')) {
+        updatedProperties[key] = {
           "date": {
-            "start": req.body.properties.Date.date.start
+            "start": properties[key].date.start
           }
-        },
-        "Hours-of-sleep": {
+        };
+      } else if (properties[key].hasOwnProperty('rich_text')) {
+        updatedProperties[key] = {
           "rich_text": [
             {
               "text": {
-                "content": `${req.body.properties["Hours-of-sleep"].number} hours of sleep`
+                "content": properties[key].rich_text[0].text.content
               }
             }
           ]
-        },
-        "Morning-routine-time": {
-          "rich_text": [
-            {
-              "text": {
-                "content": `Morning routine: ${req.body.properties["Morning-routine-time"].number} minutes`
-              }
-            }
-          ]
-        },
-        "Time-taken-to-get-up": {
-          "rich_text": [
-            {
-              "text": {
-                "content": `Out of bed after ${req.body.properties["Time-taken-to-get-up"].number} minutes`
-              }
-            }
-          ]
-        },
-        "Bedtime": {
-          "rich_text": [
-            {
-              "text": {
-                "content": req.body && req.body.properties && req.body.properties["Bedtime"] && req.body.properties["Bedtime"].rich_text ? req.body.properties["Bedtime"].rich_text[0].text.content : ''
-              }
-            }
-          ]
-        },
+        };
       }
+    }
+
+    const response = await axios.patch(`https://api.notion.com/v1/pages/${req.params.pageId}`, {
+      properties: updatedProperties
     }, { headers: notionHeaders });
+
     res.json(response.data);
   } catch (error) {
     if (error.response) {

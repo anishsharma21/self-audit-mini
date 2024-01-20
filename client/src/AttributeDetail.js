@@ -73,9 +73,10 @@ const AttributeDetail = () => {
                     }
                 ]
             };
+            const currentDate = new Date().toISOString().split('T')[0];
             properties["Date"] = {
                 "date": {
-                    "start": new Date().toISOString().split('T')[0] // Replace with the actual date
+                    "start": currentDate
                 }
             };
 
@@ -94,11 +95,31 @@ const AttributeDetail = () => {
                 };
             }
 
-            const response = await axios.post('http://localhost:5001/notion', {
-                parent: { database_id: databaseId },
-                properties: properties
+            // Check if a page already exists for the current date
+            const pagesResponse = await axios.post(`http://localhost:5001/notion/${databaseId}/query`, {
+                filter: {
+                    "property": "Date",
+                    "date": {
+                        "equals": currentDate
+                    }
+                }
             });
-            console.log(response.data);
+            const existingPage = pagesResponse.data.results[0];
+
+            if (existingPage) {
+                // If a page exists, send a PATCH request
+                const response = await axios.patch(`http://localhost:5001/notion/${existingPage.id}`, {
+                    properties: properties
+                });
+                console.log(response.data);
+            } else {
+                // If no page exists, send a POST request
+                const response = await axios.post('http://localhost:5001/notion', {
+                    parent: { database_id: databaseId },
+                    properties: properties
+                });
+                console.log(response.data);
+            }
         } catch (error) {
             console.error(error);
         }
