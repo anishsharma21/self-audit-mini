@@ -113,7 +113,7 @@ app.post('/notion', async (req, res) => {
           "rich_text": [
             {
               "text": {
-                "content": req.body.properties["Bedtime"].select.name
+                "content": req.body && req.body.properties && req.body.properties["Bedtime"] && req.body.properties["Bedtime"].rich_text ? "Bedtime: " + req.body.properties["Bedtime"].rich_text[0].text.content : ''
               }
             }
           ]
@@ -122,7 +122,11 @@ app.post('/notion', async (req, res) => {
     }, { headers: notionHeaders });
     res.json(response.data);
   } catch (error) {
-    console.error(error.response.data); // Log the error data
+    if (error.response) {
+      console.error(error.response.data); // Log the error data if response exists
+    } else {
+      console.error(error); // Log the error itself if no response
+    }
     res.json({ error: error.message });
   }
 });
@@ -176,7 +180,7 @@ app.patch('/notion/:pageId', async (req, res) => {
           "rich_text": [
             {
               "text": {
-                "content": req.body.properties["Bedtime"].select.name
+                "content": req.body && req.body.properties && req.body.properties["Bedtime"] && req.body.properties["Bedtime"].rich_text ? req.body.properties["Bedtime"].rich_text[0].text.content : ''
               }
             }
           ]
@@ -185,7 +189,11 @@ app.patch('/notion/:pageId', async (req, res) => {
     }, { headers: notionHeaders });
     res.json(response.data);
   } catch (error) {
-    console.error(error.response.data); // Log the error data
+    if (error.response) {
+      console.error(error.response.data); // Log the error data if response exists
+    } else {
+      console.error(error); // Log the error itself if no response
+    }
     res.json({ error: error.message });
   }
 });

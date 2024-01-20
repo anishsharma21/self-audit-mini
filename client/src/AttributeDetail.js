@@ -50,7 +50,7 @@ const AttributeDetail = () => {
                         "title": [
                             {
                                 "text": {
-                                    "content": "Testing backend to frontend connection"
+                                    "content": "🌕🌕🌕🌗🌑"
                                 }
                             }
                         ]
