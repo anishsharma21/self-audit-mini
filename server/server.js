@@ -7,6 +7,11 @@ const saltRounds = 10;
 const { readJsonFile } = require('./db');
 const fs = require('fs');
 require('dotenv').config();
+const axios = require('axios');
+const notionHeaders = {
+  "Authorization": `Bearer ${process.env.NOTION_API_KEY}`,
+  "Notion-Version": "2021-08-16"
+};
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -36,6 +41,110 @@ app.use(bodyParser.json());
 
 app.get('/profile', authenticateJWT, (req, res) => {
     res.json({ message: 'You are authenticated', user: req.user });
+});
+
+app.get('/notion', async (req, res) => {
+  try {
+    const response = await axios.get(`https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}`, { headers: notionHeaders });
+    res.json(response.data);
+  } catch (error) {
+    console.error(error.response.data); // Log the error data
+    res.json({ error: error.message });
+  }
+});
+
+app.get('/notion/:pageId', async (req, res) => {
+  try {
+    const response = await axios.get(`https://api.notion.com/v1/pages/${req.params.pageId}`, { headers: notionHeaders });
+    res.json(response.data);
+  } catch (error) {
+    console.error(error.response.data); // Log the error data
+    res.json({ error: error.message });
+  }
+});
+
+app.post('/notion', async (req, res) => {
+
+  try {
+    const response = await axios.post(`https://api.notion.com/v1/pages`, {
+      parent: { database_id: process.env.NOTION_DATABASE_ID },
+      properties: {
+        "Name": {
+          "title": [
+            {
+              "text": {
+                "content": req.body.properties.Name.title[0].text.content
+              }
+            }
+          ]
+        },
+        "Date": {
+          "date": {
+            "start": req.body.properties.Date.date.start
+          }
+        },
+        "Hours-of-sleep": {
+          "number": req.body.properties["Hours-of-sleep"].number
+        },
+        "Morning-routine-time": {
+          "number": req.body.properties["Morning-routine-time"].number
+        },
+        "Time-taken-to-get-up": {
+          "number": req.body.properties["Time-taken-to-get-up"].number
+        },
+        "Bedtime": {
+          "select": {
+            "name": req.body.properties["Bedtime"].select.name
+          }
+        }
+      }
+    }, { headers: notionHeaders });
+    res.json(response.data);
+  } catch (error) {
+    console.error(error.response.data); // Log the error data
+    res.json({ error: error.message });
+  }
+});
+
+app.patch('/notion/:pageId', async (req, res) => {
+  try {
+    const response = await axios.patch(`https://api.notion.com/v1/pages/${req.params.pageId}`, {
+      properties: {
+        "Name": {
+          "title": [
+            {
+              "text": {
+                "content": req.body.properties.Name.title[0].text.content
+              }
+            }
+          ]
+        },
+        "Date": {
+          "date": {
+            "start": req.body.properties.Date.date.start
+          }
+        },
+        "Hours-of-sleep": {
+          "number": req.body.properties["Hours-of-sleep"].number
+        },
+        "Morning-routine-time": {
+          "number": req.body.properties["Morning-routine-time"].number
+        },
+        "Time-taken-to-get-up": {
+          "number": req.body.properties["Time-taken-to-get-up"].number
+        },
+        "Bedtime": {
+          "select": {
+            "name": req.body.properties["Bedtime"].select.name
+          }
+        }
+      }
+    }, { headers: notionHeaders });
+    res.json(response.data);
+  } catch (error) {
+    console.error(error.response.data); // Log the error data
+    res.json({ error: error.message });
+  }
 });
 
 app.post('/register', (req, res) => {

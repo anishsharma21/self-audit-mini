@@ -5,6 +5,7 @@ import RangeInput from './RangeInput';
 import TextInput from './TextInput';
 import RadioInput from './RadioInput';
 import CheckboxInput from './CheckboxInput.js';
+import axios from 'axios';
 
 const attributeQuestions = {
     1: [
@@ -24,6 +25,10 @@ const attributeQuestions = {
     // Add more attributes here
 };
 
+const databaseIdArr = [
+    "c2c2f05d-c1f2-4a85-92d9-7edbce270298",
+]
+
 const AttributeDetail = () => {
     const { id } = useParams();
     const questions = attributeQuestions[id] || [];
@@ -32,13 +37,57 @@ const AttributeDetail = () => {
 
     const handleValueChange = (index, value) => {
         const newValues = [...values];
-        newValues[index] = value;
+        const question = questions[index];
+        if (question.inputType === 'range') {
+            newValues[index] = parseFloat(value);
+        } else if (question.inputType === 'checkbox') {
+            newValues[index] = Boolean(value);
+        } else {
+            newValues[index] = value;
+        }
         setValues(newValues);
     };
 
-    const handleSync = () => {
-        // Sync data with Notion here
-        console.log('Syncing data...');
+    const handleSync = async () => {
+        try {
+            const response = await axios.post('http://localhost:5001/notion', {
+                parent: { database_id: databaseIdArr[id - 1] },
+                properties: {
+                    "Name": {
+                        "title": [
+                            {
+                                "text": {
+                                    "content": "Testing backend to frontend connection"
+                                }
+                            }
+                        ]
+                    },
+                    "Date": {
+                        "date": {
+                            "start": new Date().toISOString().split('T')[0] // Today's date
+                        }
+                    },
+                    "Hours-of-sleep": {
+                        "number": values[0] // The first question's response
+                    },
+                    "Time-taken-to-get-up": {
+                        "number": values[1] // The second question's response
+                    },
+                    "Morning-routine-time": {
+                        "number": values[2] // The third question's response
+                    },
+                    "Bedtime": {
+                        "select": {
+                            "name": values[3] // The fourth question's response
+                        }
+                    }
+                    // Add more properties here for additional questions
+                }
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
