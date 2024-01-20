@@ -154,7 +154,7 @@ const AttributeDetail = () => {
                                 <CheckboxInput checked={value} onChange={(e) => handleValueChange(index, e.target.checked)} />
                             )}
                             <span>
-                                {question.propertyName === 'Hours-of-sleep' ? convertToHoursAndMinutes(value) : `${value} ${question.unit}`}
+                                {question.propertyName === 'Hours-of-sleep' ? convertToHoursAndMinutes(value) : `${value} ${question.unit ? question.unit : ''}`}
                             </span>
                         </label>
                     </div>
