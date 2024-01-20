@@ -64,69 +64,21 @@ app.get('/notion/:pageId', async (req, res) => {
 });
 
 app.post('/notion', async (req, res) => {
+  const notionHeaders = {
+    "Authorization": `Bearer ${process.env.NOTION_API_KEY}`,
+    "Content-Type": "application/json",
+    "Notion-Version": "2021-08-16"
+  };
+
   try {
     const response = await axios.post(`https://api.notion.com/v1/pages`, {
-      parent: { database_id: process.env.NOTION_DATABASE_ID },
-      properties: {
-        "Name": {
-          "title": [
-            {
-              "text": {
-                "content": req.body.properties.Name.title[0].text.content
-              }
-            }
-          ]
-        },
-        "Date": {
-          "date": {
-            "start": req.body.properties.Date.date.start
-          }
-        },
-        "Hours-of-sleep": {
-          "rich_text": [
-            {
-              "text": {
-                "content": `${req.body.properties["Hours-of-sleep"].number} hours of sleep`
-              }
-            }
-          ]
-        },
-        "Morning-routine-time": {
-          "rich_text": [
-            {
-              "text": {
-                "content": `Morning routine: ${req.body.properties["Morning-routine-time"].number} minutes`
-              }
-            }
-          ]
-        },
-        "Time-taken-to-get-up": {
-          "rich_text": [
-            {
-              "text": {
-                "content": `Out of bed after ${req.body.properties["Time-taken-to-get-up"].number} minutes`
-              }
-            }
-          ]
-        },
-        "Bedtime": {
-          "rich_text": [
-            {
-              "text": {
-                "content": req.body && req.body.properties && req.body.properties["Bedtime"] && req.body.properties["Bedtime"].rich_text ? "Bedtime: " + req.body.properties["Bedtime"].rich_text[0].text.content : ''
-              }
-            }
-          ]
-        },
-      }
+      parent: { database_id: req.body.parent.database_id },
+      properties: req.body.properties
     }, { headers: notionHeaders });
+
     res.json(response.data);
   } catch (error) {
-    if (error.response) {
-      console.error(error.response.data); // Log the error data if response exists
-    } else {
-      console.error(error); // Log the error itself if no response
-    }
+    console.error(error);
     res.json({ error: error.message });
   }
 });

@@ -8,23 +8,31 @@ import CheckboxInput from './CheckboxInput.js';
 import axios from 'axios';
 
 const attributeQuestions = {
-    1: [
-        { inputType: 'range', question: 'How many hours of sleep did you get?', min: 5, max: 8.5, step: 0.5, unit: 'hours' },
-        { inputType: 'range', question: 'How long did it take for you to get up?', min: 0, max: 60, step: 5, unit: 'minutes' },
-        { inputType: 'range', question: 'How long did your morning routine take?', min: 30, max: 120, step: 15, unit: 'minutes' },
-        { inputType: 'radio', question: 'What time were you in bed?', options: ['Before 9:45PM', '9:45PM - 10:45PM', '10:45PM - 11:45PM', 'After 12:00AM'] },
-        // Add more sleep questions here
-    ]
+    1: {
+        databaseId: "c2c2f05d-c1f2-4a85-92d9-7edbce270298",
+        questions: [
+            { inputType: 'range', question: 'How many hours of sleep did you get?', min: 5, max: 8.5, step: 0.5, unit: 'hours', propertyName: 'Hours-of-sleep' },
+            { inputType: 'range', question: 'How long did it take for you to get up?', min: 0, max: 60, step: 5, unit: 'minutes', propertyName: 'Morning-routine-time' },
+            { inputType: 'range', question: 'How long did your morning routine take?', min: 30, max: 120, step: 15, unit: 'minutes', propertyName: 'Time-taken-to-get-up' },
+            { inputType: 'radio', question: 'What time were you in bed?', options: ['Before 9:45PM', '9:45PM - 10:45PM', '10:45PM - 11:45PM', 'After 12:00AM'], propertyName: 'Bedtime' },
+            // Add more sleep questions here
+        ],
+    },
+    2: {
+        databaseId: "acd1f48adfcc4091a351aab15da93b6e",
+        questions: [
+            { inputType: 'range', question: 'How many calories were you off by today?', min: 0, max: 1500, step: 100, unit: 'calories', propertyName: 'Calories-off' },
+            { inputType: 'radio', question: 'Did you avoid excessive snacking today?', options: ['Yes', 'No'], propertyName: 'Avoided-snacking' },
+            { inputType: 'radio', question: 'Did you avoid junk food today?', options: ['Yes', 'No'], propertyName: 'Avoided-junk-food' },
+            { inputType: 'radio', question: 'Did you take your Vitamin D supplement today?', options: ['Yes', 'No'], propertyName: 'Vitamin-D' },
+        ]
+    }
     // Add more attributes here
 };
 
-const databaseIdArr = [
-    "c2c2f05d-c1f2-4a85-92d9-7edbce270298",
-]
-
 const AttributeDetail = () => {
     const { id } = useParams();
-    const questions = attributeQuestions[id] || [];
+    const questions = attributeQuestions[id]?.questions || [];
 
     const [values, setValues] = useState(questions.map(question => question.min || ''));
 
@@ -43,43 +51,46 @@ const AttributeDetail = () => {
 
     const handleSync = async () => {
         try {
-            const response = await axios.post('http://localhost:5001/notion', {
-                parent: { database_id: databaseIdArr[id - 1] },
-                properties: {
-                    "Name": {
-                        "title": [
-                            {
-                                "text": {
-                                    "content": "🌕🌕🌕🌗🌑"
-                                }
-                            }
-                        ]
-                    },
-                    "Date": {
-                        "date": {
-                            "start": new Date().toISOString().split('T')[0] // Today's date
+            const attribute = attributeQuestions[id];
+            const databaseId = attribute.databaseId;
+            const questions = attribute.questions;
+
+            let properties = {};
+
+            // Add the "Name" and "Date" properties
+            properties["Name"] = {
+                "title": [
+                    {
+                        "text": {
+                            "content": "🌕🌕🌕🌗🌑" // Replace with the actual title
                         }
-                    },
-                    "Hours-of-sleep": {
-                        "number": values[0] // The first question's response
-                    },
-                    "Time-taken-to-get-up": {
-                        "number": values[1] // The second question's response
-                    },
-                    "Morning-routine-time": {
-                        "number": values[2] // The third question's response
-                    },
-                    "Bedtime": {
-                        "rich_text": [
-                            {
-                                "text": {
-                                    "content": values[3] // The fourth question's response
-                                }
-                            }
-                        ]
                     }
-                    // Add more properties here for additional questions
+                ]
+            };
+            properties["Date"] = {
+                "date": {
+                    "start": new Date().toISOString().split('T')[0] // Replace with the actual date
                 }
+            };
+
+            for (let i = 0; i < questions.length; i++) {
+                let question = questions[i];
+                let value = values[i];
+
+                properties[question.propertyName] = {
+                    "rich_text": [
+                        {
+                            "text": {
+                                "content": String(value)
+                            }
+                        }
+                    ]
+                };
+            }
+
+            const response = await axios.post('http://localhost:5001/notion', {
+                parent: { database_id: databaseId },
+                properties: properties
             });
             console.log(response.data);
         } catch (error) {
