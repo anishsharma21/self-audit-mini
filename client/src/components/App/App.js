@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from '../Login/Login';
-import Register from '../Register/Register';
+// import Register from '../Register/Register';
 import Navbar from '../Navbar/Navbar';
 import MainView from '../MainView/MainView';
 import AttributeDetail from '../AttributeDetail/AttributeDetail'; // Import AttributeDetail
@@ -26,7 +26,7 @@ function App() {
         ) : (
           <>
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-            <Route path="/register" element={<Register />} />
+            {/* <Route path="/register" element={<Register />} /> */}
             <Route path="*" element={<Navigate to="/login" replace />} />
           </>
         )}

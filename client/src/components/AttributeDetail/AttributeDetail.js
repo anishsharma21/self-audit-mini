@@ -8,8 +8,8 @@ import CheckboxInput from '../Input-Types/CheckboxInput.js';
 import axios from 'axios';
 import { useMemo } from 'react';
 import { DateTime } from 'luxon';
-import { attributeQuestions } from './attributeQuestions';
-import { convertToHoursAndMinutes } from './utils';
+import { attributeQuestions } from '../../attributeQuestions';
+import { convertToHoursAndMinutes } from '../../utils';
 
 const AttributeDetail = () => {
     const { id } = useParams();
@@ -65,6 +65,12 @@ const AttributeDetail = () => {
             for (let i = 0; i < questions.length; i++) {
                 let question = questions[i];
                 let value = values[i];
+                if(question.propertyPrefix) {
+                    value = `${question.propertyPrefix}${value}`;
+                }
+                if(question.propertySuffix) {
+                    value = `${value}${question.propertySuffix}`;
+                }
 
                 properties[question.propertyName] = {
                     "rich_text": [

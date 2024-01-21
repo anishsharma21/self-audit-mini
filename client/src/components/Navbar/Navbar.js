@@ -19,7 +19,7 @@ const Navbar = ({ setIsLoggedIn }) => { // Add setIsLoggedIn prop
             ) : (
                 <>
                     <Link to="/login">Login</Link>
-                    <Link to="/register">Register</Link>
+                    {/* <Link to="/register">Register</Link> */}
                 </>
             )}
         </nav>
