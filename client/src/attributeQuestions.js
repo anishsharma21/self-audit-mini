@@ -10,7 +10,8 @@ export const attributeQuestions = {
             { inputType: 'radio', question: 'Did you do your night routine?', options: ['Done', 'Not done'], propertyName: 'Night-routine', propertyPrefix: "Night routine: ", propertySuffix: "" },
             { inputType: 'range', question: 'How many minutes of deep sleep did you get?', min: 5, max: 120, step: 5, unit: 'minutes', propertyName: 'Deep-sleep', propertyPrefix: "Deep Sleep: ", propertySuffix: " minutes" },
             { inputType: 'radio', question: 'Did you meditate?', options: ['Yes', 'No'], propertyName: 'Meditated', propertyPrefix: "Meditated: ", propertySuffix: "" },
-            { inputType: 'radio', question: 'Did you get your morning steps in?', options: ['Done', 'Not done'], propertyName: 'Meditated', propertyPrefix: "Morning steps: ", propertySuffix: "" },
+            { inputType: 'radio', question: 'Did you get your morning steps in?', options: ['Done', 'Not done'], propertyName: 'Morning-steps', propertyPrefix: "Morning steps: ", propertySuffix: "" },
+            { inputType: 'range', question: 'How many times did you wake up during the night?', min: 0, max: 5, step: 1, unit: 'times', propertyName: 'Woke-up-times', propertyPrefix: "Woke up: ", propertySuffix: " times" },
         ],
     },
     2: {
