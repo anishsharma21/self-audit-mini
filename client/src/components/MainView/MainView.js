@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom'; // Import Outlet
-import AttributeList from './AttributeList'; // Import AttributeList
+import AttributeList from '../AttributeList/AttributeList'; // Import AttributeList
 
 const MainView = () => {
     // Dummy data

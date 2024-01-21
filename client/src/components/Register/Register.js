@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import api from './api'; // Import the axios instance from api.js instead of axios
+import api from '../../api'; // Import the axios instance from api.js instead of axios
 
 const Register = () => {
   const [username, setUsername] = useState('');

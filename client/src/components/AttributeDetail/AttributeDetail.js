@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './AttributeDetail.module.css';
-import RangeInput from './RangeInput';
-import TextInput from './TextInput';
-import RadioInput from './RadioInput';
-import CheckboxInput from './CheckboxInput.js';
+import RangeInput from '../Input-Types/RangeInput.js';
+import TextInput from '../Input-Types/TextInput.js';
+import RadioInput from '../Input-Types/RadioInput.js';
+import CheckboxInput from '../Input-Types/CheckboxInput.js';
 import axios from 'axios';
 import { useMemo } from 'react';
+import { DateTime } from 'luxon';
 
 const attributeQuestions = {
     1: {
         databaseId: "c2c2f05d-c1f2-4a85-92d9-7edbce270298",
         questions: [
             { inputType: 'range', question: 'How many hours of sleep did you get?', min: 4, max: 8.5, step: 0.25, unit: 'hours', propertyName: 'Hours-of-sleep' },
-            { inputType: 'range', question: 'How long did it take for you to get up?', min: 0, max: 60, step: 1, unit: 'minutes', propertyName: 'Morning-routine-time' },
+            { inputType: 'range', question: 'How long did it take for you to get up?', min: 0, max: 60, step: 5, unit: 'minutes', propertyName: 'Morning-routine-time' },
             { inputType: 'range', question: 'How long did your morning routine take?', min: 30, max: 120, step: 15, unit: 'minutes', propertyName: 'Time-taken-to-get-up' },
             { inputType: 'radio', question: 'What time were you in bed?', options: ['Before 9:45PM', '9:45PM - 10:45PM', '10:45PM - 11:45PM', 'After 12:00AM'], propertyName: 'Bedtime' },
             // Add more sleep questions here
@@ -73,7 +74,9 @@ const AttributeDetail = () => {
                     }
                 ]
             };
-            const currentDate = new Date().toISOString().split('T')[0];
+            const now = DateTime.now().setZone('Australia/Sydney');
+            const currentDate = DateTime.utc(now.year, now.month, now.day).toISODate();
+
             properties["Date"] = {
                 "date": {
                     "start": currentDate
@@ -95,16 +98,14 @@ const AttributeDetail = () => {
                 };
             }
 
-            // Check if a page already exists for the current date
-            const pagesResponse = await axios.post(`http://localhost:5001/notion/${databaseId}/query`, {
-                filter: {
-                    "property": "Date",
-                    "date": {
-                        "equals": currentDate
-                    }
-                }
+            // Retrieve all pages from the database
+            const pagesResponse = await axios.post(`http://localhost:5001/notion/${databaseId}/query`);
+
+            // Filter the pages to find one with the same date
+            const existingPage = pagesResponse.data.results.find(page => {
+                const pageDate = DateTime.fromISO(page.properties.Date.date.start);
+                return pageDate.hasSame(DateTime.fromISO(currentDate), 'day');
             });
-            const existingPage = pagesResponse.data.results[0];
 
             if (existingPage) {
                 // If a page exists, send a PATCH request

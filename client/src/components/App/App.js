@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './Login';
-import Register from './Register';
-import Navbar from './Navbar';
-import MainView from './MainView';
-import AttributeDetail from './AttributeDetail'; // Import AttributeDetail
+import Login from '../Login/Login';
+import Register from '../Register/Register';
+import Navbar from '../Navbar/Navbar';
+import MainView from '../MainView/MainView';
+import AttributeDetail from '../AttributeDetail/AttributeDetail'; // Import AttributeDetail
 import { Navigate } from 'react-router-dom';
 
 function App() {
