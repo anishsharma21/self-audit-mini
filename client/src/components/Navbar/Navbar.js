@@ -19,7 +19,11 @@ const Navbar = ({ setIsLoggedIn }) => {
             <NavLink to="/"><img className={styles.logo} src={logo} alt="Logo" /></NavLink>
             <div className={styles.links}>
                 <NavLink exact className={styles.link} activeClassName={styles.active} to="/protected">Self Audit Mini</NavLink>
-                <NavLink exact className={isLoggedIn ? styles.button : styles.link} activeClassName={styles.active} to="/login" onClick={handleLogout}>Login</NavLink>
+                {isLoggedIn ? (
+                    <button className={styles.button} onClick={handleLogout}>Logout</button>
+                ) : (
+                    <NavLink exact className={styles.link} activeClassName={styles.active} to="/login">Login</NavLink>
+                )}
             </div>
         </nav>
     );

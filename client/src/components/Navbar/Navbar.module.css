@@ -1,7 +1,7 @@
 .nav {
     width: 60%;
     margin: 0 auto;
-    padding: 20px; /* Add horizontal padding */
+    padding: 20px 40px; /* Add horizontal padding */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,6 +28,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-decoration: none;
+    font-size: 1em; /* Add this line */
 }
 
 .link:hover, .button:hover {
