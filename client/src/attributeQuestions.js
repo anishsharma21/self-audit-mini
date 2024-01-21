@@ -4,9 +4,13 @@ export const attributeQuestions = {
         questions: [
             { inputType: 'range', question: 'How many hours of sleep did you get?', min: 4, max: 8.5, step: 0.25, unit: 'hours', propertyName: 'Hours-of-sleep', propertyPrefix: "Time sleeping: ", propertySuffix: " hours" },
             { inputType: 'range', question: 'How long did it take for you to get up?', min: 0, max: 60, step: 5, unit: 'minutes', propertyName: 'Morning-routine-time', propertyPrefix: "Got up after: ", propertySuffix: " minutes" },
-            { inputType: 'range', question: 'How long did your morning routine take?', min: 30, max: 120, step: 15, unit: 'minutes', propertyName: 'Time-taken-to-get-up', propertyPrefix: "Morning Routine: ", propertySuffix: " minutes" },
-            { inputType: 'radio', question: 'What time were you in bed?', options: ['Before 9:45PM', '9:45PM - 10:45PM', '10:45PM - 11:45PM', 'After 12:00AM'], propertyName: 'Bedtime', propertyPrefix: "Bedtime: ", propertySuffix: "" },
-            // Add more sleep questions here
+            { inputType: 'range', question: 'How long did your morning routine take?', min: 30, max: 120, step: 5, unit: 'minutes', propertyName: 'Time-taken-to-get-up', propertyPrefix: "Morning Routine: ", propertySuffix: " minutes" },
+            { inputType: 'radio', question: 'What time were you in bed?', options: ['Before 9:45PM', '9:45PM', '9:55PM', '10:15PM', '10:30PM', '10:45PM', '11:00PM', '11:30PM', '12:00AM', 'After 12:00AM'], propertyName: 'Bedtime', propertyPrefix: "Bedtime: ", propertySuffix: "" },
+            { inputType: 'radio', question: 'What time were you asleep?', options: ['Before 10:00PM', '10:15PM', '10:30PM', '10:45PM', '11:00PM', '11:15PM', '11:30PM', '11:45PM', '12:00AM', 'After 12:30AM'], propertyName: 'Asleep-at', propertyPrefix: "Asleep at: ", propertySuffix: "" },
+            { inputType: 'radio', question: 'Did you do your night routine?', options: ['Done', 'Not done'], propertyName: 'Night-routine', propertyPrefix: "Night routine: ", propertySuffix: "" },
+            { inputType: 'range', question: 'How many minutes of deep sleep did you get?', min: 5, max: 120, step: 5, unit: 'minutes', propertyName: 'Deep-sleep', propertyPrefix: "Deep Sleep: ", propertySuffix: " minutes" },
+            { inputType: 'radio', question: 'Did you meditate?', options: ['Yes', 'No'], propertyName: 'Meditated', propertyPrefix: "Meditated: ", propertySuffix: "" },
+            { inputType: 'radio', question: 'Did you get your morning steps in?', options: ['Done', 'Not done'], propertyName: 'Meditated', propertyPrefix: "Morning steps: ", propertySuffix: "" },
         ],
     },
     2: {

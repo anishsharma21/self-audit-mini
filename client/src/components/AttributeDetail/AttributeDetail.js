@@ -12,19 +12,16 @@ import { attributeQuestions } from '../../attributeQuestions';
 import { convertToHoursAndMinutes } from '../../utils';
 
 const AttributeDetail = () => {
-    console.log('Rendering AttributeDetail component');
     const { id } = useParams();
     const questions = useMemo(() => attributeQuestions[id]?.questions || [], [id]);
 
     const [values, setValues] = useState(questions.map(question => question.min || ''));
 
-    // Add this useEffect hook
     useEffect(() => {
         setValues(questions.map(question => question.min || ''));
     }, [id, questions]);
 
     useEffect(() => {
-        console.log(id, questions);
         const fetchData = async () => {
             try {
                 const attribute = attributeQuestions[id];
@@ -33,33 +30,22 @@ const AttributeDetail = () => {
                 const now = DateTime.now().setZone('Australia/Sydney');
                 const currentDate = DateTime.utc(now.year, now.month, now.day).toISODate();
 
-                // Retrieve all pages from the database
                 const pagesResponse = await axios.post(`http://localhost:5001/notion/${databaseId}/query`);
 
-                console.log('Pages response:', pagesResponse.data.results); // Log the response
-
-                // Filter the pages to find one with the same date
                 const existingPage = pagesResponse.data.results.find(page => {
                     const pageDate = DateTime.fromISO(page.properties.Date.date.start);
                     return pageDate.hasSame(DateTime.fromISO(currentDate), 'day');
                 });
 
                 if (existingPage) {
-                    console.log('Existing page:', existingPage); // Log the existing page
-        
-                    // If a page exists, update the values state with the existing data
                     const newValues = questions.map(question => {
-                        console.log('Existing page properties:', existingPage.properties[question.propertyName]?.rich_text[0]);
                         let existingValue = existingPage.properties[question.propertyName]?.rich_text[0]?.plain_text;
-                        console.log(`Existing value for ${question.propertyName}:`, existingValue); // Log the existing value
-        
+
                         if (typeof existingValue === 'string') {
-                            // Split the string into parts using the first colon as the delimiter
                             const parts = existingValue.split(/:(.+)/);
-                            // The actual value should be the rest of the string, after trimming any leading or trailing whitespace
                             existingValue = parts[1]?.trim();
                         }
-        
+
                         if (existingValue !== undefined) {
                             if (question.inputType === 'range') {
                                 const numberValue = parseFloat(existingValue);
@@ -67,15 +53,11 @@ const AttributeDetail = () => {
                             } else if (question.inputType === 'checkbox') {
                                 return existingValue.toLowerCase() === 'true';
                             } else if (question.inputType === 'radio') {
-                                // Define a function to determine if an option matches the existing value
                                 const isOptionMatching = (option) => {
-                                    // Create a regular expression from the option
                                     const regex = new RegExp(`^${option.trim()}$`, 'i');
-                                    // If the existing value matches the regular expression, it's a match
                                     return regex.test(existingValue);
                                 };
                             
-                                // Find the option that matches the existing value
                                 const matchingOption = question.options.find(isOptionMatching);
                             
                                 return matchingOption || question.options[0];
@@ -117,12 +99,11 @@ const AttributeDetail = () => {
 
             let properties = {};
 
-            // Add the "Name" and "Date" properties
             properties["Name"] = {
                 "title": [
                     {
                         "text": {
-                            "content": "🌕🌕🌕🌗🌑" // Replace with the actual title
+                            "content": "🌕🌕🌕🌗🌑"
                         }
                     }
                 ]
@@ -157,23 +138,19 @@ const AttributeDetail = () => {
                 };
             }
 
-            // Retrieve all pages from the database
             const pagesResponse = await axios.post(`http://localhost:5001/notion/${databaseId}/query`);
 
-            // Filter the pages to find one with the same date
             const existingPage = pagesResponse.data.results.find(page => {
                 const pageDate = DateTime.fromISO(page.properties.Date.date.start);
                 return pageDate.hasSame(DateTime.fromISO(currentDate), 'day');
             });
 
             if (existingPage) {
-                // If a page exists, send a PATCH request
                 const response = await axios.patch(`http://localhost:5001/notion/${existingPage.id}`, {
                     properties: properties
                 });
                 console.log(response.data);
             } else {
-                // If no page exists, send a POST request
                 const response = await axios.post('http://localhost:5001/notion', {
                     parent: { database_id: databaseId },
                     properties: properties
