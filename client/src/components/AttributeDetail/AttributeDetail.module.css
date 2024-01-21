@@ -1,10 +1,44 @@
 .attributeDetailContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
+    width: 60%;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
 }
 
 .detailElement {
-    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* align items at the start */
+    margin-bottom: 20px;
+}
+
+.detailElement label {
+    font-size: 18px;
+    margin-bottom: 0; /* remove bottom margin */
+}
+
+.questionTitle {
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.detailElement span {
+    font-size: 16px;
+    color: #888;
+}
+
+.syncButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #0070f3;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.syncButton:hover {
+    background-color: #0051a2;
 }

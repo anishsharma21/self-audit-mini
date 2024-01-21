@@ -1,0 +1,23 @@
+.radioContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.radioOption {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.radioOption input[type="radio"] {
+    margin-right: 10px;
+}
+
+.radioOption label {
+    font-size: 16px;
+    margin: 0;
+}

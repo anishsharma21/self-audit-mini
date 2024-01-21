@@ -1,8 +1,8 @@
-import React from 'react';
+import styles from './RangeInput.module.css';
 
 const RangeInput = ({ min, max, step, value, onChange }) => {
     return (
-        <input type="range" min={min} max={max} step={step} value={value} onChange={onChange} />
+        <input className={styles.rangeInput} type="range" min={min} max={max} step={step} value={value} onChange={onChange} />
     );
 }
 

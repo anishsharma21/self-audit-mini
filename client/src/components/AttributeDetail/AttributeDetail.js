@@ -170,8 +170,8 @@ const AttributeDetail = () => {
 
                 return (
                     <div key={index} className={styles.detailElement}>
+                        <div className={styles.questionTitle}>{question.question}</div>
                         <label>
-                            {question.question}
                             {question.inputType === 'range' && (
                                 <RangeInput min={question.min} max={question.max} step={question.step} value={value} onChange={(e) => handleValueChange(index, e.target.value)} />
                             )}
@@ -191,7 +191,7 @@ const AttributeDetail = () => {
                     </div>
                 );
             })}
-            <button onClick={handleSync}>Sync</button>
+            <button className={styles.syncButton} onClick={handleSync}>Sync</button>
         </div>
     );
 }
