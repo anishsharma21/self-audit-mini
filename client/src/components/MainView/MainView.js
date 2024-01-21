@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom'; // Import Outlet
-import AttributeList from '../AttributeList/AttributeList'; // Import AttributeList
-import styles from './MainView.module.css'; // Import styles
-import AttributeButtons from '../AttributeButtons/AttributeButtons'; // Import AttributeButtons
+import React from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
+import AttributeList from '../AttributeList/AttributeList';
+import styles from './MainView.module.css';
+import AttributeButtons from '../AttributeButtons/AttributeButtons';
 
 const MainView = () => {
-
-    const [isAttributeSelected, setAttributeSelected] = useState(false);
+    const location = useLocation();
+    const { pathname } = location;
+    const isMainView = pathname === '/protected';
 
     const attributes = [
         { id: 1, name: 'Sleep' },
@@ -22,12 +23,12 @@ const MainView = () => {
     return (
         <div className={styles.mainView}>
             <h1 className={styles.title}>Attributes</h1>
-            {isAttributeSelected ? (
-                <AttributeButtons attributes={attributes} />
+            {isMainView ? (
+                <AttributeList attributes={attributes} />
             ) : (
-                <AttributeList attributes={attributes} onAttributeClick={setAttributeSelected} />
+                <AttributeButtons attributes={attributes} />
             )}
-            <Outlet /> {/* Render nested routes */}
+            <Outlet />
         </div>
     );
 }
