@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom'; // Import Outlet
 import AttributeList from '../AttributeList/AttributeList'; // Import AttributeList
 import styles from './MainView.module.css'; // Import styles
+import AttributeButtons from '../AttributeButtons/AttributeButtons'; // Import AttributeButtons
 
 const MainView = () => {
+
+    const [isAttributeSelected, setAttributeSelected] = useState(false);
 
     const attributes = [
         { id: 1, name: 'Sleep' },
@@ -18,8 +21,12 @@ const MainView = () => {
 
     return (
         <div className={styles.mainView}>
-            <h1 className={styles.title}>Main View</h1>
-            <AttributeList attributes={attributes} /> {/* Pass the entire attribute object */}
+            <h1 className={styles.title}>Attributes</h1>
+            {isAttributeSelected ? (
+                <AttributeButtons attributes={attributes} />
+            ) : (
+                <AttributeList attributes={attributes} onAttributeClick={setAttributeSelected} />
+            )}
             <Outlet /> {/* Render nested routes */}
         </div>
     );
