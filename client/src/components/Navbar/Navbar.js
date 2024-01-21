@@ -1,27 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import styles from './Navbar.module.css';
+import logo from '../../media/logo.png';
 
-const Navbar = ({ setIsLoggedIn }) => { // Add setIsLoggedIn prop
+const Navbar = ({ setIsLoggedIn }) => {
     const isLoggedIn = !!localStorage.getItem('token');
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        setIsLoggedIn(false); // Update isLoggedIn state after logout
+    const handleLogout = (event) => {
+        if (isLoggedIn) {
+            event.preventDefault(); // Prevent navigation
+            localStorage.removeItem('token');
+            setIsLoggedIn(false);
+        }
     };
 
     return (
-        <nav>
-            {isLoggedIn ? (
-                <>
-                    <Link to="/protected">Self Audit Mini</Link>
-                    <button onClick={handleLogout}>Logout</button>
-                </>
-            ) : (
-                <>
-                    <Link to="/login">Login</Link>
-                    {/* <Link to="/register">Register</Link> */}
-                </>
-            )}
+        <nav className={styles.nav}>
+            <NavLink to="/"><img className={styles.logo} src={logo} alt="Logo" /></NavLink>
+            <div className={styles.links}>
+                <NavLink exact className={styles.link} activeClassName={styles.active} to="/protected">Self Audit Mini</NavLink>
+                <NavLink exact className={isLoggedIn ? styles.button : styles.link} activeClassName={styles.active} to="/login" onClick={handleLogout}>Login</NavLink>
+            </div>
         </nav>
     );
 };

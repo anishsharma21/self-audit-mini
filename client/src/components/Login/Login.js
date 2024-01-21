@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api';
+import styles from './Login.module.css';
 
 const Login = ({ setIsLoggedIn }) => { // Add setIsLoggedIn prop
   const [username, setUsername] = useState('');
@@ -26,19 +27,20 @@ const Login = ({ setIsLoggedIn }) => { // Add setIsLoggedIn prop
     }
   };
 
-    return (
-            <form onSubmit={handleSubmit}>
-                    <label>
-                            Username:
-                            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-                    </label>
-                    <label>
-                            Password:
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </label>
-                    {errorMessage && <p>{errorMessage}</p>} {/* Add this line */}
-                    <button type="submit">Login</button>
-            </form>
+  return (
+      <form onSubmit={handleSubmit} className={styles.loginForm}>
+        <h1 className={styles.heading}>Self Audit Mini</h1>
+        <div className={styles.inputGroup}>
+          <label>Username:</label>
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+        </div>
+        <div className={styles.inputGroup}>
+          <label>Password:</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
+        {errorMessage && <p>{errorMessage}</p>}
+        <button type="submit">Login</button>
+      </form>
     );
 };
 
