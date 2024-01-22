@@ -10,6 +10,7 @@ import { useMemo } from 'react';
 import { DateTime } from 'luxon';
 import { attributeQuestions } from '../../attributeQuestions';
 import { convertToHoursAndMinutes } from '../../utils';
+import { BASE_URL } from '../../config';
 
 const AttributeDetail = () => {
     const { id } = useParams();
@@ -30,7 +31,7 @@ const AttributeDetail = () => {
                 const now = DateTime.now().setZone('Australia/Sydney');
                 const currentDate = DateTime.utc(now.year, now.month, now.day).toISODate();
 
-                const pagesResponse = await axios.post(`http://localhost:5001/notion/${databaseId}/query`);
+                const pagesResponse = await axios.post(`${BASE_URL}/notion/${databaseId}/query`);
 
                 const existingPage = pagesResponse.data.results.find(page => {
                     const pageDate = DateTime.fromISO(page.properties.Date.date.start);
@@ -138,7 +139,7 @@ const AttributeDetail = () => {
                 };
             }
 
-            const pagesResponse = await axios.post(`http://localhost:5001/notion/${databaseId}/query`);
+            const pagesResponse = await axios.post(`${BASE_URL}/notion/${databaseId}/query`);
 
             const existingPage = pagesResponse.data.results.find(page => {
                 const pageDate = DateTime.fromISO(page.properties.Date.date.start);
@@ -146,12 +147,12 @@ const AttributeDetail = () => {
             });
 
             if (existingPage) {
-                const response = await axios.patch(`http://localhost:5001/notion/${existingPage.id}`, {
+                const response = await axios.patch(`${BASE_URL}/notion/${existingPage.id}`, {
                     properties: properties
                 });
                 console.log(response.data);
             } else {
-                const response = await axios.post('http://localhost:5001/notion', {
+                const response = await axios.post(`${BASE_URL}/notion`, {
                     parent: { database_id: databaseId },
                     properties: properties
                 });
