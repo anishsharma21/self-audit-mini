@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an axios instance
 const api = axios.create({
-  baseURL: 'https://powerful-scrubland-98539-f436d5130079.herokuapp.com/', // Replace with your server's address
+  baseURL: 'http://localhost:5001', // Replace with your server's address
 });
 
 // Add a request interceptor to attach the JWT token to requests
