@@ -1,5 +1,3 @@
-![image](https://github.com/user-attachments/assets/77b95816-bc51-4174-8ad3-bfb5355a9233)
-
 # Self-Audit-Mini
 
 Self-Audit-Mini is a personalised, all-encompassing habit tracking application designed primarily for interfacing directly with personal Notion productivity dashboards. It serves as a powerful tool for individuals looking to monitor and enhance their daily habits, including diet, sleep, physical activity, and various personal habits, through a simple-to-use and personalized interface.
